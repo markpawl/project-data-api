@@ -17,54 +17,54 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import com.webage.domain.Customer;
-import com.webage.domain.Event;
-import com.webage.repository.EventRepository;
+import com.webage.domain.Registration;
+import com.webage.repository.RegistrationRepository;
 
 @RestController
-@RequestMapping("/events")
-public class EventAPI {
+@RequestMapping("/registrations")
+public class RegistrationAPI {
+
 	@Autowired
-	EventRepository repo;
+	RegistrationRepository repo;
 
 	@GetMapping
-	public Iterable<Event> getAll() {
+	public Iterable<Registration> getAll() {
 		return repo.findAll();
 	}
 
-	@GetMapping("/{eventId}")
-	public Event getEventById(@PathVariable("eventId") long id) {
+	@GetMapping("/{registrationId}")
+	public Registration getRegistrationById(@PathVariable("registrationId") long id) {
 		return repo.findOne(id);
 	}
-	
+
 	@PostMapping
-	public ResponseEntity<?> addEvent(@RequestBody Event newEvent, HttpRequest request,
+	public ResponseEntity<?> addRegistration(@RequestBody Registration newRegistration, HttpRequest request,
 			UriComponentsBuilder uri) {
-		if (newEvent.getId() != 0 || newEvent.getCode() == null || newEvent.getTitle() == null || newEvent.getDescription() == null) {
+		if (newRegistration.getId() != 0 || newRegistration.getEvent_id() == null || newRegistration.getCustomer_id() == null || newRegistration.getRegistration_date() == null) {
 			// Reject we'll assign the event id
 			return ResponseEntity.badRequest().build();
 		}
-		newEvent = repo.save(newEvent);
+		newRegistration = repo.save(newRegistration);
 		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
-				.buildAndExpand(newEvent.getId()).toUri();
+				.buildAndExpand(newRegistration.getId()).toUri();
 		ResponseEntity<?> response = ResponseEntity.created(location).build();
 		return response;
 	}
 
 	@PutMapping("/{eventId}")
-	public ResponseEntity<?> putEvent(
-			@RequestBody Event newEvent,
+	public ResponseEntity<?> putRegistration(
+			@RequestBody Registration newRegistration,
 			@PathVariable("eventId") long eventId) 
 	{
-		if (newEvent.getId() != eventId || newEvent.getCode() == null || newEvent.getTitle() == null || newEvent.getDescription() == null) {
+		if (newRegistration.getEvent_id() == null || newRegistration.getCustomer_id() == null ) { //|| newRegistration.getRegistration_date() == null) {
 			return ResponseEntity.badRequest().build();
 		}
-		newEvent = repo.save(newEvent);
+		newRegistration = repo.save(newRegistration);
 		return ResponseEntity.ok().build();
 	}	
 	
 	@DeleteMapping("/{eventId}")
-	public ResponseEntity<?> deleteEventById(@PathVariable("eventId") long id) {
+	public ResponseEntity<?> deleteRegistrationById(@PathVariable("eventId") long id) {
 		repo.delete(id);
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 	}	

@@ -17,6 +17,8 @@ public class Customer {
 	@Column(name="CUSTOMER_NAME")
 	String name;
 	
+	String password;
+	
 	String email;
 
 	public long getId() {
@@ -33,6 +35,14 @@ public class Customer {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
 	public String getEmail() {
