@@ -1,8 +1,12 @@
 package com.webage.api;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.security.Key;
 import java.util.Date;
-import java.util.Iterator;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpRequest;
@@ -16,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.webage.domain.Customer;
+import com.webage.domain.CustomerFactory;
 import com.webage.domain.Token;
 import com.webage.filter.AuthFilter;
 import com.webage.repository.CustomersRepository;
@@ -26,7 +31,8 @@ import io.jsonwebtoken.Jwts;
 @RequestMapping("/token")
 public class TokenAPI {
 
-	private Key key = AuthFilter.key;	
+	private static Key key = AuthFilter.key;	
+	public static Token appUserToken;
 	
 	@Autowired
 	CustomersRepository repo;
@@ -52,12 +58,22 @@ public class TokenAPI {
 		return (ResponseEntity<?>) new ResponseEntity(HttpStatus.BAD_REQUEST);
 	}
 	
-	public boolean checkPassword(String username, String password) {
+	private boolean checkPassword(String username, String password) {
 		// special case for application user
 		if(username.equals("ApiClientApp") && password.equals("secret")) {
 			return true;
 		}
+		// make call to customer service 
+		Customer cust = getCustomerByNameFromCustomerAPI(username);
 		
+		// compare name and password
+		if(cust.getName().equals(username) && cust.getPassword().equals(password)) {
+			return true;				
+		}		
+		return false;
+		
+		// local version of the above code, gets customer from repository
+		/*
 		Iterator<Customer> customers = repo.findAll().iterator();
 		while(customers.hasNext()) {
 			Customer cust = customers.next();
@@ -65,11 +81,19 @@ public class TokenAPI {
 				return true;				
 			}
 		}
-		return false;
+		*/
+		
+
 	}
 	
+	public static Token getAppUserToken() {
+		if(appUserToken == null || appUserToken.getToken() == null || appUserToken.getToken().length() == 0) {
+			appUserToken = createToken("ApiClientApp");
+		}
+		return appUserToken;
+	}
 	
-    public Token createToken(String username) {
+    private static Token createToken(String username) {
     	String scopes = "com.webage.data.apis";
     	// special case for application user
     	if( username.equalsIgnoreCase("ApiClientApp")) {
@@ -78,7 +102,7 @@ public class TokenAPI {
     	long fiveHoursInMillis = 1000 * 60 *60 * 5;
     	
     	String token_string = Jwts.builder()
-    			.setSubject("Joe")
+    			.setSubject(username)
     			.setIssuer("me@me.com")
     			.claim("scopes",scopes)
     			.setExpiration(new Date(System.currentTimeMillis() + fiveHoursInMillis))
@@ -86,4 +110,44 @@ public class TokenAPI {
     			.compact(); 
     	return new Token(token_string);
     }
-}
+    
+    
+    private Customer getCustomerByNameFromCustomerAPI(String username) {
+  	  try {
+
+  		URL url = new URL("http://localhost:8080/api/customers/byname/" + username );
+  		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+  		conn.setRequestMethod("GET");
+  		conn.setRequestProperty("Accept", "application/json");
+  		Token token = getAppUserToken();
+  		conn.setRequestProperty("authorization", "Bearer " + token.getToken());
+  		// conn.setRequestProperty("tokencheck", "false");
+
+  		if (conn.getResponseCode() != 200) {
+  			throw new RuntimeException("Failed : HTTP error code : " + conn.getResponseCode());
+  		}
+
+  		BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
+
+  		String output = "";
+  		String out = "";
+  		System.out.println("Output from Server .... \n");
+  		while ((out = br.readLine()) != null) { 
+  			output += out;
+  		}
+		System.out.println(output);
+  		conn.disconnect();
+  		return CustomerFactory.getCustomer(output);
+
+  	  } catch (MalformedURLException e) {
+  		e.printStackTrace();
+
+  	  } catch (java.io.IOException e) {
+		e.printStackTrace();
+	}
+  	  return null;
+
+  	}   	
+
+}    
+

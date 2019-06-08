@@ -38,6 +38,19 @@ public class AuthFilter implements Filter{
 		HttpServletResponse res = (HttpServletResponse) response;
 		String uri = req.getRequestURI();
 		
+		
+		// for development purposes
+		// allow turning off auth checking with header tokencheck:false
+		String tokenheader = req.getHeader("tokencheck");
+		if( tokenheader != null && !tokenheader.equalsIgnoreCase("true") ) {
+			chain.doFilter(request, response);
+			return;		
+		}
+		
+		// auth checking will not apply to these cases
+		// token endpoint
+		// user register endpoint
+		// healthcheck endpoint on '/api/'
 		if(   uri.startsWith("/api/token") 
 	       || uri.startsWith("/api/register")
 	       || uri.equals("/api/")
@@ -45,6 +58,7 @@ public class AuthFilter implements Filter{
 			chain.doFilter(request, response);
 			return;			
 		}else{
+			// check JWT token
 			String authheader = req.getHeader("authorization");
 			if(authheader != null && authheader.length() > 7 && authheader.startsWith("Bearer")) {
 				String jwt_token = authheader.substring(7, authheader.length());

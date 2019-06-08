@@ -52,9 +52,26 @@ public class CustomerAPI {
 		return response;
 	}
 
-	//lookupCustomerByName
+	//lookupCustomerByName GET
+	@GetMapping("/byname/{username}")
+	public ResponseEntity<?> lookupCustomerByNameGet(@PathVariable("username") String username, HttpRequest request,
+			UriComponentsBuilder uri) {
+		ApiLogger.log("username: " + username);
+		
+		Iterator<Customer> customers = repo.findAll().iterator();
+		while(customers.hasNext()) {
+			Customer cust = customers.next();
+			if(cust.getName().equalsIgnoreCase(username)) {
+				ResponseEntity<?> response = ResponseEntity.ok(cust);
+				return response;				
+			}			
+		}
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+	}
+	
+	//lookupCustomerByName POST
 	@PostMapping("/byname")
-	public ResponseEntity<?> lookupCustomerByName(@RequestBody String username, HttpRequest request,
+	public ResponseEntity<?> lookupCustomerByNamePost(@RequestBody String username, HttpRequest request,
 			UriComponentsBuilder uri) {
 		ApiLogger.log("username: " + username);
 		Iterator<Customer> customers = repo.findAll().iterator();
