@@ -1,0 +1,8 @@
+# production
+/rest-server/build
+*.jar
+*.class
+
+# misc
+/rest-server/.gradle
+/rest-server/gradle
