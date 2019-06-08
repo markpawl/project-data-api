@@ -38,7 +38,10 @@ public class AuthFilter implements Filter{
 		HttpServletResponse res = (HttpServletResponse) response;
 		String uri = req.getRequestURI();
 		
-		if( uri.startsWith("/api/token") || uri.startsWith("/api/register")) {
+		if(   uri.startsWith("/api/token") 
+	       || uri.startsWith("/api/register")
+	       || uri.equals("/api/")
+	       ) {
 			chain.doFilter(request, response);
 			return;			
 		}else{
