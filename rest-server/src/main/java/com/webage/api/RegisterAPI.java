@@ -10,7 +10,6 @@ import java.net.URI;
 import java.net.URL;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -31,8 +30,7 @@ public class RegisterAPI {
 	CustomersRepository repo;
 
 	@PostMapping
-	public ResponseEntity<?> registerCustomer(@RequestBody Customer newCustomer, HttpRequest request,
-			UriComponentsBuilder uri) {
+	public ResponseEntity<?> registerCustomer(@RequestBody Customer newCustomer, UriComponentsBuilder uri) {
 		if (newCustomer.getId() != 0 || newCustomer.getName() == null || newCustomer.getEmail() == null) {
 			// Reject we'll assign the customer id
 			return ResponseEntity.badRequest().build();

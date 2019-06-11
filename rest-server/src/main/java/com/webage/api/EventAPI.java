@@ -1,9 +1,9 @@
 package com.webage.api;
 
 import java.net.URI;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import com.webage.domain.Customer;
 import com.webage.domain.Event;
 import com.webage.repository.EventRepository;
 
@@ -33,13 +32,13 @@ public class EventAPI {
 	}
 
 	@GetMapping("/{eventId}")
-	public Event getEventById(@PathVariable("eventId") long id) {
-		return repo.findOne(id);
+	public Optional<Event> getEventById(@PathVariable("eventId") long id) {
+		// return repo.findOne(id);
+		return repo.findById(id);
 	}
 	
 	@PostMapping
-	public ResponseEntity<?> addEvent(@RequestBody Event newEvent, HttpRequest request,
-			UriComponentsBuilder uri) {
+	public ResponseEntity<?> addEvent(@RequestBody Event newEvent, UriComponentsBuilder uri) {
 		if (newEvent.getId() != 0 || newEvent.getCode() == null || newEvent.getTitle() == null || newEvent.getDescription() == null) {
 			// Reject we'll assign the event id
 			return ResponseEntity.badRequest().build();
@@ -65,7 +64,8 @@ public class EventAPI {
 	
 	@DeleteMapping("/{eventId}")
 	public ResponseEntity<?> deleteEventById(@PathVariable("eventId") long id) {
-		repo.delete(id);
+		// repo.delete(id);
+		repo.deleteById(id);
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 	}	
 	

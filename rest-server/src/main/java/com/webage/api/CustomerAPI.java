@@ -2,9 +2,9 @@ package com.webage.api;
 
 import java.net.URI;
 import java.util.Iterator;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -34,13 +34,13 @@ public class CustomerAPI {
 	}
 
 	@GetMapping("/{customerId}")
-	public Customer getCustomerById(@PathVariable("customerId") long id) {
-		return repo.findOne(id);
+	public Optional<Customer> getCustomerById(@PathVariable("customerId") long id) {
+		//return repo.findOne(id);
+		return repo.findById(id);
 	}
 	
 	@PostMapping
-	public ResponseEntity<?> addCustomer(@RequestBody Customer newCustomer, HttpRequest request,
-			UriComponentsBuilder uri) {
+	public ResponseEntity<?> addCustomer(@RequestBody Customer newCustomer, UriComponentsBuilder uri) {
 		if (newCustomer.getId() != 0 || newCustomer.getName() == null || newCustomer.getEmail() == null) {
 			// Reject we'll assign the customer id
 			return ResponseEntity.badRequest().build();
@@ -54,7 +54,7 @@ public class CustomerAPI {
 
 	//lookupCustomerByName GET
 	@GetMapping("/byname/{username}")
-	public ResponseEntity<?> lookupCustomerByNameGet(@PathVariable("username") String username, HttpRequest request,
+	public ResponseEntity<?> lookupCustomerByNameGet(@PathVariable("username") String username,
 			UriComponentsBuilder uri) {
 		ApiLogger.log("username: " + username);
 		
@@ -71,8 +71,7 @@ public class CustomerAPI {
 	
 	//lookupCustomerByName POST
 	@PostMapping("/byname")
-	public ResponseEntity<?> lookupCustomerByNamePost(@RequestBody String username, HttpRequest request,
-			UriComponentsBuilder uri) {
+	public ResponseEntity<?> lookupCustomerByNamePost(@RequestBody String username, UriComponentsBuilder uri) {
 		ApiLogger.log("username: " + username);
 		Iterator<Customer> customers = repo.findAll().iterator();
 		while(customers.hasNext()) {
@@ -100,7 +99,8 @@ public class CustomerAPI {
 	
 	@DeleteMapping("/{customerId}")
 	public ResponseEntity<?> deleteCustomerById(@PathVariable("customerId") long id) {
-		repo.delete(id);
+		// repo.delete(id);
+		repo.deleteById(id);
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 	}	
 	

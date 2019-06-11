@@ -9,7 +9,6 @@ import java.security.Key;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,7 +16,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import com.webage.domain.Customer;
 import com.webage.domain.CustomerFactory;
@@ -43,8 +41,8 @@ public class TokenAPI {
 	}
 	
 	@PostMapping
-	public ResponseEntity<?> createTokenForCustomer(@RequestBody Customer customer, HttpRequest request,
-			UriComponentsBuilder uri) {
+	// public ResponseEntity<?> createTokenForCustomer(@RequestBody Customer customer, HttpRequest request, UriComponentsBuilder uri) {
+	public ResponseEntity<?> createTokenForCustomer(@RequestBody Customer customer) {
 		
 		String username = customer.getName();
 		String password = customer.getPassword();
@@ -55,7 +53,8 @@ public class TokenAPI {
 			return response;			
 		}
 		// bad request
-		return (ResponseEntity<?>) new ResponseEntity(HttpStatus.BAD_REQUEST);
+		return (ResponseEntity<?>) ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+		
 	}
 	
 	private boolean checkPassword(String username, String password) {
@@ -67,7 +66,7 @@ public class TokenAPI {
 		Customer cust = getCustomerByNameFromCustomerAPI(username);
 		
 		// compare name and password
-		if(cust.getName().equals(username) && cust.getPassword().equals(password)) {
+		if(cust != null && cust.getName().equals(username) && cust.getPassword().equals(password)) {
 			return true;				
 		}		
 		return false;
@@ -112,42 +111,39 @@ public class TokenAPI {
     }
     
     
-    private Customer getCustomerByNameFromCustomerAPI(String username) {
-  	  try {
+	private Customer getCustomerByNameFromCustomerAPI(String username) {
+		try {
 
-  		URL url = new URL("http://localhost:8080/api/customers/byname/" + username );
-  		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-  		conn.setRequestMethod("GET");
-  		conn.setRequestProperty("Accept", "application/json");
-  		Token token = getAppUserToken();
-  		conn.setRequestProperty("authorization", "Bearer " + token.getToken());
-  		// conn.setRequestProperty("tokencheck", "false");
+			URL url = new URL("http://localhost:8080/api/customers/byname/" + username);
+			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+			conn.setRequestMethod("GET");
+			conn.setRequestProperty("Accept", "application/json");
+			Token token = getAppUserToken();
+			conn.setRequestProperty("authorization", "Bearer " + token.getToken());
 
-  		if (conn.getResponseCode() != 200) {
-  			throw new RuntimeException("Failed : HTTP error code : " + conn.getResponseCode());
-  		}
+			if (conn.getResponseCode() != 200) {
+				return null;
+			} else {
+				BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
+				String output = "";
+				String out = "";
+				while ((out = br.readLine()) != null) {
+					output += out;
+				}
+				conn.disconnect();
+				return CustomerFactory.getCustomer(output);
+			}
 
-  		BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+			return null;
 
-  		String output = "";
-  		String out = "";
-  		System.out.println("Output from Server .... \n");
-  		while ((out = br.readLine()) != null) { 
-  			output += out;
-  		}
-		System.out.println(output);
-  		conn.disconnect();
-  		return CustomerFactory.getCustomer(output);
+		} catch (java.io.IOException e) {
+			e.printStackTrace();
+			return null;
+		}
 
-  	  } catch (MalformedURLException e) {
-  		e.printStackTrace();
-
-  	  } catch (java.io.IOException e) {
-		e.printStackTrace();
-	}
-  	  return null;
-
-  	}   	
+	}  	
 
 }    
 

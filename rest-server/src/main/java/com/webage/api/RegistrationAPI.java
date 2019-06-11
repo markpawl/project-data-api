@@ -1,9 +1,9 @@
 package com.webage.api;
 
 import java.net.URI;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -33,13 +33,13 @@ public class RegistrationAPI {
 	}
 
 	@GetMapping("/{registrationId}")
-	public Registration getRegistrationById(@PathVariable("registrationId") long id) {
-		return repo.findOne(id);
+	public Optional<Registration> getRegistrationById(@PathVariable("registrationId") long id) {
+		// return repo.findOne(id);
+		return repo.findById(id);
 	}
 
 	@PostMapping
-	public ResponseEntity<?> addRegistration(@RequestBody Registration newRegistration, HttpRequest request,
-			UriComponentsBuilder uri) {
+	public ResponseEntity<?> addRegistration(@RequestBody Registration newRegistration, UriComponentsBuilder uri) {
 		if (newRegistration.getId() != 0 || newRegistration.getEvent_id() == null || newRegistration.getCustomer_id() == null || newRegistration.getRegistration_date() == null) {
 			// Reject we'll assign the event id
 			return ResponseEntity.badRequest().build();
@@ -65,7 +65,8 @@ public class RegistrationAPI {
 	
 	@DeleteMapping("/{eventId}")
 	public ResponseEntity<?> deleteRegistrationById(@PathVariable("eventId") long id) {
-		repo.delete(id);
+		// repo.delete(id);
+		repo.deleteById(id);
 		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 	}	
 	
