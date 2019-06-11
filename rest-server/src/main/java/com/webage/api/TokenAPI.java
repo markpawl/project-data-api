@@ -5,8 +5,6 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.security.Key;
-import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,16 +18,14 @@ import org.springframework.web.bind.annotation.RestController;
 import com.webage.domain.Customer;
 import com.webage.domain.CustomerFactory;
 import com.webage.domain.Token;
-import com.webage.filter.AuthFilter;
 import com.webage.repository.CustomersRepository;
-
-import io.jsonwebtoken.Jwts;
+import com.webage.util.JWTHelper;
 
 @RestController
 @RequestMapping("/token")
 public class TokenAPI {
 
-	private static Key key = AuthFilter.key;	
+	//private static Key key = AuthFilter.key;	
 	public static Token appUserToken;
 	
 	@Autowired
@@ -98,15 +94,17 @@ public class TokenAPI {
     	if( username.equalsIgnoreCase("ApiClientApp")) {
     		scopes = "com.webage.auth.apis";
     	}
-    	long fiveHoursInMillis = 1000 * 60 *60 * 5;
+    	String token_string = JWTHelper.createToken(scopes);
     	
-    	String token_string = Jwts.builder()
-    			.setSubject(username)
-    			.setIssuer("me@me.com")
-    			.claim("scopes",scopes)
-    			.setExpiration(new Date(System.currentTimeMillis() + fiveHoursInMillis))
-    			.signWith(key)
-    			.compact(); 
+		/*
+		 * long fiveHoursInMillis = 1000 * 60 *60 * 5;
+		 * 
+		 * String token_string = Jwts.builder() .setSubject(username)
+		 * .setIssuer("me@me.com") .claim("scopes",scopes) .setExpiration(new
+		 * Date(System.currentTimeMillis() + fiveHoursInMillis)) .signWith(key)
+		 * .compact();
+		 */
+    	
     	return new Token(token_string);
     }
     
