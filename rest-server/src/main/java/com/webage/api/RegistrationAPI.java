@@ -29,26 +29,17 @@ public class RegistrationAPI {
 
 	@GetMapping
 	public Iterable<Registration> getAll() {
-		return repo.findAll();
+		//  Workshop:  Implementation to return existing registrations
 	}
 
 	@GetMapping("/{registrationId}")
 	public Optional<Registration> getRegistrationById(@PathVariable("registrationId") long id) {
-		// return repo.findOne(id);
-		return repo.findById(id);
+		//  Workshop:  Implementation to return a single registration from an ID
 	}
 
 	@PostMapping
 	public ResponseEntity<?> addRegistration(@RequestBody Registration newRegistration, UriComponentsBuilder uri) {
-		if (newRegistration.getId() != 0 || newRegistration.getEvent_id() == null || newRegistration.getCustomer_id() == null || newRegistration.getRegistration_date() == null) {
-			// Reject we'll assign the event id
-			return ResponseEntity.badRequest().build();
-		}
-		newRegistration = repo.save(newRegistration);
-		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
-				.buildAndExpand(newRegistration.getId()).toUri();
-		ResponseEntity<?> response = ResponseEntity.created(location).build();
-		return response;
+		//  Workshop:  Implementation to add a new registration; think about data validation and error handling.
 	}
 
 	@PutMapping("/{eventId}")
@@ -56,18 +47,16 @@ public class RegistrationAPI {
 			@RequestBody Registration newRegistration,
 			@PathVariable("eventId") long eventId) 
 	{
-		if (newRegistration.getEvent_id() == null || newRegistration.getCustomer_id() == null ) { //|| newRegistration.getRegistration_date() == null) {
-			return ResponseEntity.badRequest().build();
-		}
-		newRegistration = repo.save(newRegistration);
-		return ResponseEntity.ok().build();
+		// Workshop: Implementation to update an event. Think about error handling.
 	}	
 	
 	@DeleteMapping("/{eventId}")
 	public ResponseEntity<?> deleteRegistrationById(@PathVariable("eventId") long id) {
-		// repo.delete(id);
-		repo.deleteById(id);
-		return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+		//  Workshop:  Implementation to delete an event.  For discussion (do not implement unless
+		//  you are sure you have time):  Are there checks you should make to ensure validity of 
+		//  data across various entities?  Where should these checks be implemented.  Are there
+		//  advantages and disadvantages to separating data into separate independent entities,
+		//  each with it's own "microservice"?
 	}	
 	
 }
