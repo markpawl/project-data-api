@@ -8,9 +8,9 @@ Do not feel that you need to follow the sample code; it is provided as an option
 
 A few notes about the sample code:
 
-* Imports have not been updated, so they are whatever the original implementation called for.  You may (probably will) find it neccessary to add your own imports, and you may wish to clean out imports that are not being used in your implementation.
-* For the most part, just the implementation of methods has been removed as an exercise for you.  Do not feel that you have to use the remaining code as-is; if you feel you want to change the argument list to a function, do so; just be careful that you update references in other parts of the project.
 * Hints and instructions are in comments, starting with "workshop:"
+* For the most part, just the implementation of methods has been removed as an exercise for you.  Do not feel that you have to use the remaining code as-is; if you feel you want to change the argument list to a function, do so; just be careful that you update references in other parts of the project.
+* Imports have not been updated, so they are whatever the original implementation called for.  You may (probably will) find it neccessary to add your own imports, and you may wish to clean out imports that are not being used in your implementation.
 
 ## Implementation of APIs (com.webage.api.*)
 
