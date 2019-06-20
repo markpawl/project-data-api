@@ -29,17 +29,20 @@ public class EventAPI {
 	@GetMapping
 	public Iterable<Event> getAll() {
 		//  Workshop:  Implement a method to retrieve all events
+		retrun null;
 	}
 
 	@GetMapping("/{eventId}")
 	public Optional<Event> getEventById(@PathVariable("eventId") long id) {
 		//  Workshop:  Implement a method to retrieve a single event by it's ID
+		return null;
 	}
 	
 	@PostMapping
 	public ResponseEntity<?> addEvent(@RequestBody Event newEvent, UriComponentsBuilder uri) {
 		//  Workshop:  Implement a method to create a new event in response to a POST message.
 		//  Think about how you ensure that the event is properly formed.
+		return null;
 	}
 
 	@PutMapping("/{eventId}")
@@ -48,11 +51,13 @@ public class EventAPI {
 			@PathVariable("eventId") long eventId) 
 	{
 		//  Workshop:  Implement a method to update an entitye in response to a PUT message.
+		return null;
 	}	
 	
 	@DeleteMapping("/{eventId}")
 	public ResponseEntity<?> deleteEventById(@PathVariable("eventId") long id) {
 		//  Workshop:  Implement a method to delete an entity. 
+		return null;
 	}	
 	
 }

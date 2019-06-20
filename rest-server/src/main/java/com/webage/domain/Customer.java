@@ -21,4 +21,5 @@ public class Customer {
 	//  as its persistent store, or you may choose some other mechanism.  In thinking about 
 	//  how you implement the custome domain, what do you think about to make it easier and 
 	//  safer to move from one represenstation to another.	
+	return null;
 }

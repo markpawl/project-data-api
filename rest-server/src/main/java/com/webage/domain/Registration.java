@@ -16,5 +16,5 @@ public class Registration {
 	//
 	//  Implement Registration.  Your implementation is very likely going to change 
 	//  over time as you add functionality 
-	
+	return null;
 }

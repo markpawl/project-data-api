@@ -32,12 +32,14 @@ public class CustomerAPI {
 	public Iterable<Customer> getAll() {
 		//  Workshop:  Write an implementation that replies with all customers.
 		//  Your implementation should be no more than a few lines, at most, and make use of the 'repo' object
+		return null;   
 	}
 
 	@GetMapping("/{customerId}")
 	public Optional<Customer> getCustomerById(@PathVariable("customerId") long id) {
 		//  Workshop:  Write an implementatoin that looks up one customer.  What do you return if the requested 
 		//  customer ID does not exists?  This implementation could be as short as a single line.
+		return null;
 	}
 	
 	@PostMapping
@@ -47,6 +49,7 @@ public class CustomerAPI {
 		//  not null and that no id was passed (it will be auto generated when the record
 		//  is inserted.  Remember REST semantics - return a reference to the newly created 
 		//  entity as a URI.
+		return null;
 	}
 
 	//lookupCustomerByName GET
@@ -57,6 +60,7 @@ public class CustomerAPI {
 		//  your response should be if no customer matches the name the caller is searching for.
 		//  With the data model implemented in CustomersRepository, do you need to handle more than
 		//  one match per request?
+		return null;
 	}
 	
 	//lookupCustomerByName POST
@@ -65,6 +69,7 @@ public class CustomerAPI {
 		//  Workshop:  Write an implementation to look up a customer by name, using POST semantics
 		//  rather than GET.  You should be able to make use of most of your implmentation for
 		//  lookupCustomerByNameGet().  
+		return null;
 	}	
 	
 	
@@ -76,6 +81,7 @@ public class CustomerAPI {
 		//  Workshop:  Write an implementation to update or create a new customer with an HTTP PUT, with the 
 		//  requestor specifying the customer ID.  Are there error conditions to be handled?  How much data
 		//  validation should you implement considering that customers are stored in a CustomersRepository object.
+		return null;
 	}	
 	
 	@DeleteMapping("/{customerId}")
@@ -86,6 +92,7 @@ public class CustomerAPI {
 		//  a "delete"?  Is it always the right thing from a business point of view to literally 
 		//  delete a customer entry?  If you did actually delete a customer entry, are there issues
 		//  you could potentially run into later? 
+		return null;
 	}	
 	
 	

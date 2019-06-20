@@ -36,6 +36,7 @@ public class RegisterAPI {
 	@PostMapping
 	public ResponseEntity<?> registerCustomer(@RequestBody Customer newCustomer, UriComponentsBuilder uri) {
 		//  Implementation here!
+		return null;
 	}
 
 

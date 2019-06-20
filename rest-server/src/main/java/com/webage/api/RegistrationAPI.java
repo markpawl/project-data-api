@@ -30,16 +30,19 @@ public class RegistrationAPI {
 	@GetMapping
 	public Iterable<Registration> getAll() {
 		//  Workshop:  Implementation to return existing registrations
+		return null;
 	}
 
 	@GetMapping("/{registrationId}")
 	public Optional<Registration> getRegistrationById(@PathVariable("registrationId") long id) {
 		//  Workshop:  Implementation to return a single registration from an ID
+		return null;
 	}
 
 	@PostMapping
 	public ResponseEntity<?> addRegistration(@RequestBody Registration newRegistration, UriComponentsBuilder uri) {
 		//  Workshop:  Implementation to add a new registration; think about data validation and error handling.
+		return null;
 	}
 
 	@PutMapping("/{eventId}")
@@ -48,6 +51,7 @@ public class RegistrationAPI {
 			@PathVariable("eventId") long eventId) 
 	{
 		// Workshop: Implementation to update an event. Think about error handling.
+		return null;
 	}	
 	
 	@DeleteMapping("/{eventId}")
@@ -57,6 +61,7 @@ public class RegistrationAPI {
 		//  data across various entities?  Where should these checks be implemented.  Are there
 		//  advantages and disadvantages to separating data into separate independent entities,
 		//  each with it's own "microservice"?
+		return null;
 	}	
 	
 }
