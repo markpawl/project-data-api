@@ -42,11 +42,11 @@ public class CustomerAPI {
 	
 	@PostMapping
 	public ResponseEntity<?> addCustomer(@RequestBody Customer newCustomer, UriComponentsBuilder uri) {
-		//  Workshop:  Write an implementation that adds a new customer.  Your implementation should
-		//  properly handle the circumstance where the caller tries to add a customer who already
-		//  exists.  Remember REST semantics - return a reference to the newly created entity as a URI.
-		//
-		//  @Mark - Verify my description
+		//  Workshop:  Write an implementation that adds a new customer.  Your
+		//  implementation should check to make sure that the name and email fields are
+		//  not null and that no id was passed (it will be auto generated when the record
+		//  is inserted.  Remember REST semantics - return a reference to the newly created 
+		//  entity as a URI.
 	}
 
 	//lookupCustomerByName GET
