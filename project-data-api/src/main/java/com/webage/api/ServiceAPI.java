@@ -22,7 +22,7 @@ public class ServiceAPI {
 		count += 1;
 		Date date = new Date();
 		String dateformat = SimpleDateFormat.getDateTimeInstance(SimpleDateFormat.SHORT, SimpleDateFormat.FULL).format(date);
-		return "<h3>The Event Registration service is up and running!</h3>" + "<br/>Instance: " + instanceId + ", " + "<br/>DateTime: " + dateformat  + "<br/>CallCount: "+count;
+		return "<h3>The Event Data API service is up and running!</h3>" + "<br/>Instance: " + instanceId + ", " + "<br/>DateTime: " + dateformat  + "<br/>CallCount: "+count;
 	}
 	
 
