@@ -1,7 +1,14 @@
-plugins { id "org.springframework.boot" version "2.1.5.RELEASE" } // this should be first line
+
+// this should be first line
+plugins { id "org.springframework.boot" version "2.1.5.RELEASE" }
+
 apply plugin: 'java'
 apply plugin: 'maven'
 apply plugin: 'application'
+
+// FIXME:
+apply plugin: 'idea'
+
 
 group = 'com.webage.spring.samples'
 version = '0.0.1-SNAPSHOT'
@@ -12,6 +19,7 @@ mainClassName = "com.webage.App"
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
+
 tasks.withType(JavaCompile) {
 	options.encoding = 'UTF-8'
 }
@@ -41,4 +49,15 @@ dependencies {
     runtime group: 'io.jsonwebtoken', name: 'jjwt-jackson', version:'0.10.5'
     runtime group: 'org.bouncycastle', name: 'bcprov-jdk15on', version:'1.60'
     
+}
+
+// Download Source and JavaDocs for all dependencies
+idea.module.downloadJavadoc = true
+idea.module.downloadSources = true
+
+
+eclipse {
+  classpath {
+    downloadSources = true
+  }
 }
