@@ -40,7 +40,15 @@ public class AuthFilter implements Filter{
 			chain.doFilter(request, response);
 			return;		
 		}
-		
+
+		// for development purposes
+		// allow turning off auth checking with query parameter ?tokencheck=false
+		String tokenparam = req.getParameter("tokencheck");
+		if( tokenparam != null && !tokenparam.equalsIgnoreCase("true") ) {
+			chain.doFilter(request, response);
+			return;		
+		}
+				
 		// auth checking will not apply to these cases
 		// token endpoint
 		// user register endpoint
